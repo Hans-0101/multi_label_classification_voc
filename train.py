@@ -1,4 +1,5 @@
 import os
+from tkinter import image_names
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -74,6 +75,8 @@ for e in range(EPOCH):
         # targets = targets.cuda()
         optimizer.zero_grad()
         # forward
+        print(images)
+        print(model)
         pred = model(images)
         # pred = model(images).cuda()
         # loss
