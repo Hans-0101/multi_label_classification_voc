@@ -19,8 +19,8 @@ BATCH_SIZE = 16
 EPOCH = 200
 
 if torch.cuda.is_available():
-    device = 'cuda:0'
-    # torch.set_default_tensor_type('torch.cuda.FloatTensor')
+    device = 'cuda'
+    torch.set_default_tensor_type('torch.cuda.FloatTensor')
 else:
     device = 'cpu'
     # torch.set_default_tensor_type('torch.FloatTensor')
