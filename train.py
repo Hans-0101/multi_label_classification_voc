@@ -72,7 +72,8 @@ for e in range(EPOCH):
         targets = targets.cuda()
         optimizer.zero_grad()
         # forward
-        pred = model(images)
+        # pred = model(images)
+        pred = model(images).cuda()
         # loss
         loss = criterion(pred.double(), targets)
         train_loss += loss.item()
