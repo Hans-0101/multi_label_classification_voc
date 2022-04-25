@@ -49,11 +49,11 @@ for i, (name, param) in enumerate(model.features.named_parameters()):
     param.requires_grad = False
 
 # Momentum / L2 panalty
-optimizer = optim.SGD(model.classifier.parameters(), lr=0.001, weight_decay=1e-5, momentum=0.9)
+optimizer = optim.SGD(model.classifier.parameters(), lr=0.001, weight_decay=1e-5, momentum=0.9).cuda()
 scheduler = optim.lr_scheduler.MultiStepLR(optimizer=optimizer,
                                            milestones=[50, 100, 150],
-                                           gamma=0.1)
-criterion = nn.BCEWithLogitsLoss()
+                                           gamma=0.1).cuda()
+criterion = nn.BCEWithLogitsLoss().cuda()
 
 best_loss = 100
 train_iter = len(train_loader)
@@ -89,7 +89,7 @@ for e in range(EPOCH):
             images = images.cuda()
             # targets = targets.to(device)
             targets = targets.cuda()
-            
+
             pred = model(images)
             # loss
             loss = criterion(pred.double(), targets)
