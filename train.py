@@ -38,8 +38,8 @@ train_loader = voc.get_loader(transformer=train_transformer, datatype='train')
 valid_loader = voc.get_loader(transformer=valid_transformer, datatype='val')
 
 # load model
-model = models.vgg16(pretrained=True).to(device)
-# model = models.vgg16(pretrained=True).cuda()
+# model = models.vgg16(pretrained=True).to(device)
+model = models.vgg16(pretrained=True).cuda()
 
 # VOC num class 20
 model.classifier[6] = nn.Linear(4096, 20)
