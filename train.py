@@ -20,7 +20,7 @@ EPOCH = 200
 
 if torch.cuda.is_available():
     device = 'cuda'
-    torch.set_default_tensor_type('torch.cuda.FloatTensor')
+    # torch.set_default_tensor_type('torch.cuda.FloatTensor')
 else:
     device = 'cpu'
     # torch.set_default_tensor_type('torch.FloatTensor')
@@ -66,8 +66,10 @@ for e in range(EPOCH):
     scheduler.step()
 
     for i, (images, targets) in tqdm(enumerate(train_loader), total=train_iter):
-        images = images.to(device)
-        targets = targets.to(device)
+        # images = images.to(device)
+        images = images.cuda()
+        # targets = targets.to(device)
+        targets = targets.cuda()
         optimizer.zero_grad()
         # forward
         pred = model(images)
@@ -83,9 +85,11 @@ for e in range(EPOCH):
 
     with torch.no_grad():
         for images, targets in valid_loader:
-            images = images.to(device)
-            targets = targets.to(device)
-
+            # images = images.to(device)
+            images = images.cuda()
+            # targets = targets.to(device)
+            targets = targets.cuda()
+            
             pred = model(images)
             # loss
             loss = criterion(pred.double(), targets)
