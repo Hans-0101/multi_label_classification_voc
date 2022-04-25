@@ -16,14 +16,16 @@ VOC_CLASSES = (
 )
 MODEL_PATH = 'model.h5'
 BATCH_SIZE = 16
-EPOCH = 200
+EPOCH = 100
 
-if torch.cuda.is_available():
-    device = 'cuda'
-    # torch.set_default_tensor_type('torch.cuda.FloatTensor')
-else:
-    device = 'cpu'
-    # torch.set_default_tensor_type('torch.FloatTensor')
+# if torch.cuda.is_available():
+#     device = 'cuda'
+#     # torch.set_default_tensor_type('torch.cuda.FloatTensor')
+# else:
+#     device = 'cpu'
+#     # torch.set_default_tensor_type('torch.FloatTensor')
+ctx = "cuda" if torch.cuda.is_available() else "cpu"
+device = torch.device(ctx)
 
 # augmentation
 train_transformer = transforms.Compose([transforms.RandomHorizontalFlip(),
@@ -38,8 +40,8 @@ train_loader = voc.get_loader(transformer=train_transformer, datatype='train')
 valid_loader = voc.get_loader(transformer=valid_transformer, datatype='val')
 
 # load model
-# model = models.vgg16(pretrained=True).to(device)
-model = models.vgg16(pretrained=True).cuda()
+model = models.vgg16(pretrained=True).to(device)
+# model = models.vgg16(pretrained=True).cuda()
 
 # VOC num class 20
 model.classifier[6] = nn.Linear(4096, 20)
@@ -66,14 +68,14 @@ for e in range(EPOCH):
     scheduler.step()
 
     for i, (images, targets) in tqdm(enumerate(train_loader), total=train_iter):
-        # images = images.to(device)
-        images = images.cuda()
-        # targets = targets.to(device)
-        targets = targets.cuda()
+        images = images.to(device)
+        # images = images.cuda()
+        targets = targets.to(device)
+        # targets = targets.cuda()
         optimizer.zero_grad()
         # forward
-        # pred = model(images)
-        pred = model(images).cuda()
+        pred = model(images)
+        # pred = model(images).cuda()
         # loss
         loss = criterion(pred.double(), targets)
         train_loss += loss.item()
@@ -86,13 +88,13 @@ for e in range(EPOCH):
 
     with torch.no_grad():
         for images, targets in valid_loader:
-            # images = images.to(device)
-            images = images.cuda()
-            # targets = targets.to(device)
-            targets = targets.cuda()
+            images = images.to(device)
+            # images = images.cuda()
+            targets = targets.to(device)
+            # targets = targets.cuda()
 
-            # pred = model(images)
-            pred = model(images).cuda()
+            pred = model(images)
+            # pred = model(images).cuda()
             # loss
             loss = criterion(pred.double(), targets)
             valid_loss += loss.item()
