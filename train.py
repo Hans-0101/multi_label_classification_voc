@@ -75,8 +75,7 @@ for e in range(EPOCH):
         # targets = targets.cuda()
         optimizer.zero_grad()
         # forward
-        print(images)
-        print(model)
+        model = model.to(device)
         pred = model(images)
         # pred = model(images).cuda()
         # loss
