@@ -90,7 +90,8 @@ for e in range(EPOCH):
             # targets = targets.to(device)
             targets = targets.cuda()
 
-            pred = model(images)
+            # pred = model(images)
+            pred = model(images).cuda()
             # loss
             loss = criterion(pred.double(), targets)
             valid_loss += loss.item()
