@@ -19,7 +19,7 @@ BATCH_SIZE = 16
 EPOCH = 200
 
 if torch.cuda.is_available():
-    device = 'cuda'
+    device = 'cuda:0'
     # torch.set_default_tensor_type('torch.cuda.FloatTensor')
 else:
     device = 'cpu'
@@ -39,6 +39,7 @@ valid_loader = voc.get_loader(transformer=valid_transformer, datatype='val')
 
 # load model
 model = models.vgg16(pretrained=True).to(device)
+# model = models.vgg16(pretrained=True).cuda()
 
 # VOC num class 20
 model.classifier[6] = nn.Linear(4096, 20)
